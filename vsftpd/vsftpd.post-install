@@ -1,0 +1,7 @@
+INFO="\033[1;36m"
+NORMAL="\033[0;39m"
+if [ ! -f etc/vsftpd.conf ]; then
+      cp etc/vsftpd.conf{.example,}
+      printf "${INFO} /etc/vsftpd.conf created ${NORMAL}\n"
+      printf "${INFO} Double check /etc/vsftpd.conf and adapted to your needs ${NORMAL}\n"
+fi
