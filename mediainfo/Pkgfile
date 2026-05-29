@@ -1,0 +1,27 @@
+description="Show technical and tag informations about video or audio file."
+url="https://mediaarea.net/"
+
+license="BSD"
+
+packager="spiky <spiky@nutyx.org>"
+contributors="Greg,Tnut"
+
+makedepends=(libmediainfo)
+
+name=mediainfo
+version=26.01
+release=2
+
+source=(https://mediaarea.net/download/source/$name/$version/"${name}"_$version.tar.xz)
+
+build() {
+
+  cd MediaInfo/Project/GNU/CLI
+  ./autogen.sh
+  ./configure --prefix=/usr
+  make
+  make DESTDIR=$PKG install
+
+  install -Dm644 $SRC/MediaInfo/LICENSE $PKG/usr/share/licenses/$name/LICENSE
+  install -Dm644 $SRC/MediaInfo/License.html $PKG/usr/share/licenses/$name/License.html
+}
