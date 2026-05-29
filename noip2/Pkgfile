@@ -1,0 +1,40 @@
+description='Dynamic DNS Update Client for Linux'
+url='https://www.noip.com/download?page=linux'
+
+packager="spiky <spiky@nutyx.org>"
+contributors="Tnut"
+
+name=noip2
+version=2.1.9-1
+release=8
+
+PKGMK_GROUPS=()
+PKGMK_KEEP_SOURCES='no'
+source=(noip2-2.1.9-consolidate-2.patch
+	http://www.no-ip.com/client/linux/noip-duc-linux.tar.gz)
+
+build(){
+cd noip-$version
+patch -Np1 -i ../noip2-2.1.9-consolidate-2.patch
+make
+mkdir -p $PKG/{usr/bin,etc}
+cp noip2 $PKG/usr/bin/
+
+## service
+# systemd
+mkdir -p $PKG/usr/lib/systemd/system
+mkdir -p $PKG/etc/systemd/system/multi-user
+cat > $PKG/usr/lib/systemd/system/$name.service << "EOF"
+[Unit]
+Description="No-IP Dynamic DNS Update Client"
+
+[Service]
+ExecStart=/usr/bin/noip2
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
+EOF
+ln -sv /usr/lib/systemd/system/$name.service \
+$PKG/etc/systemd/system/multi-user/$name.service
+}
