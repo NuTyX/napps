@@ -1,0 +1,21 @@
+description="A simple command-line screenshot utility for X"
+url="https://github.com/resurrecting-open-source-projects/scrot"
+
+packager="spiky <spiky@nutyx.org>"
+contributors="Chris,F.,Tnut"
+
+makedepends=(imlib2 autoconf-archive xorg-libxfixes xorg-libxcomposite libbsd xorg-libxinerama)
+
+name=scrot
+version=2.0.0
+
+source=("https://github.com/resurrecting-open-source-projects/scrot/archive/$version/$name-$version.tar.gz")  
+
+build() {
+  cd $name-$version
+  autoreconf -fiv
+  ./configure --prefix=/usr \
+              --mandir=/usr/share/man
+  make
+  make DESTDIR=$PKG docsdir=/usr/share/doc/scrot-$version install
+}
