@@ -1,0 +1,36 @@
+description='Desktop publishing software'
+url='https://www.scribus.net'
+
+packager="spiky <spiky@nutyx.org>"
+contributors="Pierre,Tnut"
+
+makedepends=(git icu cmake boost aspell cups qt6-tools qt6-declarative qt6-5compat
+             qt6-svg gnutls kerberos hunspell
+             podofo librevenge boost ghostscript lcms2 libxml2 cairo poppler)
+
+run=(shared-mime-info desktop-file-utils)
+
+name=scribus
+version=1.6.6
+release=2
+
+tag=ba246c3
+
+source=(https://github.com/scribusproject/scribus.git)
+
+
+build() {
+    cd $name-$version
+    mkdir build
+    cd build
+    cmake ../ -DCMAKE_INSTALL_PREFIX=/usr \
+        -DCMAKE_SKIP_RPATH=ON \
+        -DWANT_CPP17=ON \
+        -DLIB_SUFFIX=""
+
+    make
+    make DESTDIR=$PKG install
+    install -Dm644 ../scribus.desktop \
+        $PKG/usr/share/applications/scribus.desktop
+        
+}
