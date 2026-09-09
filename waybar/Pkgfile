@@ -1,0 +1,43 @@
+description='Highly customizable Wayland bar for Sway and Wlroots based compositors.'
+url='https://github.com/Alexays/Waybar'
+
+license="MIT"
+
+packager="tnut <tnut@nutyx.org>"
+contributors="BlogofraisFR, Spiky"
+
+makedepends=(systemd meson wayland-protocols catch2)
+run=(gtkmm)
+
+name=waybar
+version=0.15.0
+release=2
+
+source=(https://github.com/Alexays/Waybar/archive/refs/tags/$version.tar.gz)
+PKGMK_GROUPS=(devel)
+
+prepare() {
+
+mv Waybar-$version $name-$version
+
+cd $name-$version
+
+sed -i '1i#define HAVE_WLR' include/factory.hpp
+sed -i '2i#define USE_EXPERIMENTAL' include/factory.hpp
+}
+
+build() {
+cd $name-$version
+mkdir build
+cd    build
+
+meson setup ..                \
+       --prefix=/usr          \
+            --buildtype=release
+
+ninja
+
+DESTDIR=$PKG ninja install
+
+install -Dm644 ../LICENSE $PKG/usr/share/licenses/$name/LICENSE
+}
