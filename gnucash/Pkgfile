@@ -1,0 +1,28 @@
+description="Personal and small-business financial-accounting application"
+url="https://gnucash.org/"
+
+packager="tnut <tnut@nutyx.org>"
+contributors="Spiky"
+license=(GPL2)
+
+makedepends=(cmake boost guile libdbi gtest webkit2gtk-4
+            gwenhywfar aqbanking libofx libdbi-drivers)
+run=(desktop-file-utils)
+
+name=gnucash
+version=5.16
+release=1
+
+source=(https://downloads.sourceforge.net/$name/$name-$version.tar.bz2)
+
+build() {
+cd $name-$version
+
+cmake -DCMAKE_INSTALL_PREFIX=/usr \
+      -DCMAKE_INSTALL_LIBDIR=/usr/lib \
+      -DCOMPILE_GSCHEMAS=OFF
+make
+make DESTDIR=$PKG install
+
+install -Dm644 LICENSE $PKG/usr/share/licenses/$name/LICENSE
+}
