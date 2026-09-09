@@ -1,0 +1,12 @@
+description='File manager with curses interface, which provides Vi[m]-like environment'
+url='https://vifm.info/'
+
+packager="spiky <spiky@nutyx.org>"
+
+name=vifm
+version=0.14.4
+
+makedepends=(file perl)
+run=(desktop-file-utils)
+
+source=(https://github.com/vifm/vifm/releases/download/v$version/$name-$version.tar.bz2)
