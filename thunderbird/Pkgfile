@@ -1,0 +1,352 @@
+description="Standalone mail and news reader from mozilla.org"
+url="https://www.mozilla.org/thunderbird"
+
+license="MPL-2.0 GPL-2.0-only LGPL-2.1-only"
+
+packager="spiky <spiky@nutyx.org>"
+maintainer="Pierre,Fabianwang,Rems,Spiky"
+
+makedepends=(rustc autoconf2-13 alsa-lib gtk3 zip unzip libevent libwebp
+             nspr nss yasm dbus-glib doxygen libnotify openjdk  sqlite wireless-tools
+             xorg-libx11 xorg-libxt xorg-libxrandr cbindgen pulseaudio node libvpx
+             mesa xorg-libxcomposite xorg-libxdamage)
+
+run=(startup-notification hunspell startup-notification
+     desktop-file-utils hicolor-icon-theme shared-mime-info)
+
+
+name=thunderbird
+version=155.0
+
+source=(https://ftp.mozilla.org/pub/mozilla.org/thunderbird/releases/$version/source/thunderbird-$version.source.tar.xz
+        $name.desktop
+        mozpkix-x11-success-macro.patch)
+
+pack_remove_locale() {
+
+wget  https://archive.mozilla.org/pub/thunderbird/releases/$version/linux-${PKGMK_ARCH}/xpi/${1}.xpi
+install -Dm644 ${1}.xpi \
+$PKG/usr/lib/$name/extensions/langpack-${1}@$name.mozilla.org.xpi
+rm ${1}.xpi
+cd $PKG
+bsdtar -cf \
+$PKGMK_PACKAGE_DIR/${name}.${1}${PKGMK_PACKAGE_EXT}$version-$release \
+usr/lib/$name/extensions/langpack-${1}@$name.mozilla.org.xpi
+
+rm usr/lib/$name/extensions/langpack-${1}@$name.mozilla.org.xpi
+
+}
+
+prepare() {
+cd $name-$version
+
+patch -Np1 -i ../mozpkix-x11-success-macro.patch
+}
+
+build() {
+  cd $name-${version%esr}
+
+  cat > mozconfig << "EOF"
+ac_add_options --enable-application=comm/mail
+
+ac_add_options --prefix=/usr
+ac_add_options --enable-release
+ac_add_options --enable-hardening
+ac_add_options --enable-optimize
+
+# Branding
+ac_add_options --enable-official-branding
+ac_add_options --enable-update-channel=release
+ac_add_options --with-distribution-id=NuTyX
+
+# Keys
+#ac_add_options --with-google-location-service-api-keyfile=@PWD@/google-api-key
+#ac_add_options --with-google-safebrowsing-api-keyfile=@PWD@/google-api-key
+#ac_add_options --with-mozilla-api-keyfile=@PWD@/mozilla-api-key
+
+# System libraries
+ac_add_options --with-system-zlib
+# ac_add_options --with-system-bz2
+# ac_add_options --with-system-icu
+ac_add_options --with-system-jpeg
+# does not have APNG support
+ac_add_options --with-system-png
+ac_add_options --with-system-libvpx
+ac_add_options --with-system-nspr
+ac_add_options --with-system-nss
+ac_add_options --with-system-webp
+ac_add_options --with-system-libevent
+ac_add_options --with-system-ffi
+ac_add_options --with-system-pixman
+
+# Features
+# ac_add_options --enable-alsa
+ac_add_options --disable-jack
+ac_add_options --disable-crashreporter
+ac_add_options --disable-updater
+
+# System addons
+ac_add_options --with-unsigned-addon-scopes=app,system
+ac_add_options --allow-addon-sideload
+
+# Using sandboxed wasm libraries has been moved to all builds instead
+# of only mozilla automation builds. It requires extra llvm packages
+# and was reported to seriously slow the build. Disable it.
+ac_add_options --without-wasm-sandboxed-libraries
+
+EOF
+
+  sed -e '1i\#![warn(dangerous_implicit_autorefs)]\r' \
+    -i third_party/rust/allocator-api2/src/stable/vec/mod.rs
+
+  export CC=clang CXX=clang++ AR=llvm-ar NM=llvm-nm RANLIB=llvm-ranlib
+
+  export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=none
+  export MOZBUILD_STATE_PATH=${PWD}/mozbuild
+
+  SHELL=/bin/sh ./mach build
+
+  SHELL=/bin/sh DESTDIR="$PKG" MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=none ./mach install
+
+  unset MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE
+  unset MOZBUILD_STATE_PATH
+
+  for i in 16 22 24 32 48 64 128 256; do
+    install -Dm644 comm/mail/branding/thunderbird/default${i}.png \
+      "$PKG/usr/share/icons/hicolor/${i}x${i}/apps/$name.png"
+  done
+
+  install -Dm644 comm/mail/branding/thunderbird/TB-symbolic.svg \
+    "$PKG/usr/share/icons/hicolor/symbolic/apps/thunderbird-symbolic.svg"
+
+  mkdir -pv $PKG/usr/share/applications
+  install -Dm644 $SRC/thunderbird.desktop \
+    $PKG/usr/share/applications/thunderbird.desktop
+
+  mkdir -pv $PKG/usr/lib/thunderbird/defaults/pref
+
+  cat > $PKG/usr/lib/thunderbird/defaults/pref/vendor.js << "EOF"
+// Use LANG environment variable to choose locale
+pref("intl.locale.requested", "");
+EOF
+}
+locale_ar()
+{
+pack_remove_locale ar
+}
+locale_as()
+{
+pack_remove_locale as
+}
+locale_cs()
+{
+pack_remove_locale cs
+}
+locale_da()
+{
+pack_remove_locale da
+}
+locale_de()
+{
+pack_remove_locale de
+}
+locale_el()
+{
+pack_remove_locale el
+}
+locale_es()
+{
+for lang in es-AR es-ES
+do
+   wget  http://download.cdn.mozilla.net/pub/mozilla.org/$name/releases/$version/linux-$PKGMK_ARCH/xpi/$lang.xpi
+   install -Dm644 $lang.xpi \
+   $PKG/usr/lib/$name/extensions/langpack-$lang@$name.mozilla.org.xpi
+   rm $lang.xpi
+done
+
+cd $PKG
+bsdtar -cf \
+$PKGMK_PACKAGE_DIR/${name}.es${PKGMK_PACKAGE_EXT}$version-$release \
+usr/lib/$name/extensions/langpack-es-AR@$name.mozilla.org.xpi \
+usr/lib/$name/extensions/langpack-es-ES@$name.mozilla.org.xpi
+
+rm usr/lib/$name/extensions/langpack-es-AR@$name.mozilla.org.xpi
+rm usr/lib/$name/extensions/langpack-es-ES@$name.mozilla.org.xpi
+}
+locale_et()
+{
+pack_remove_locale et
+}
+locale_fa()
+{
+pack_remove_locale fa
+}
+locale_ff()
+{
+pack_remove_locale ff
+}
+locale_fi()
+{
+pack_remove_locale fi
+}
+locale_fr()
+{
+pack_remove_locale fr
+}
+locale_ga()
+{
+lang=ga-IE
+wget  http://download.cdn.mozilla.net/pub/mozilla.org/$name/releases/$version/linux-$PKGMK_ARCH/xpi/$lang.xpi
+install -Dm644 $lang.xpi \
+$PKG/usr/lib/$name/extensions/langpack-$lang@$name.mozilla.org.xpi
+rm $lang.xpi
+cd $PKG
+bsdtar -cf \
+$PKGMK_PACKAGE_DIR/${name}.ga${PKGMK_PACKAGE_EXT}$version-$release \
+usr/lib/$name/extensions/langpack-$lang@$name.mozilla.org.xpi
+
+rm usr/lib/$name/extensions/langpack-$lang@$name.mozilla.org.xpi
+}
+locale_gl()
+{
+pack_remove_locale gl
+}
+locale_hr()
+{
+pack_remove_locale hr
+}
+locale_hu()
+{
+pack_remove_locale hu
+}
+locale_is()
+{
+pack_remove_locale is
+}
+locale_it()
+{
+pack_remove_locale it
+}
+locale_ja()
+{
+pack_remove_locale ja
+}
+locale_ko()
+{
+pack_remove_locale ko
+}
+locale_lt()
+{
+pack_remove_locale lt
+}
+locale_nl()
+{
+pack_remove_locale nl
+}
+locale_nn()
+{
+lang=nn-NO
+wget  http://download.cdn.mozilla.net/pub/mozilla.org/$name/releases/$version/linux-$PKGMK_ARCH/xpi/$lang.xpi
+install -Dm644 $lang.xpi \
+$PKG/usr/lib/$name/extensions/langpack-$lang@$name.mozilla.org.xpi
+rm $lang.xpi
+cd $PKG
+bsdtar -cf \
+$PKGMK_PACKAGE_DIR/${name}.nn${PKGMK_PACKAGE_EXT}$version-$release \
+usr/lib/$name/extensions/langpack-$lang@$name.mozilla.org.xpi
+
+rm usr/lib/$name/extensions/langpack-$lang@$name.mozilla.org.xpi
+}
+locale_pl()
+{
+pack_remove_locale pl
+}
+locale_pt()
+{
+for lang in pt-PT pt-BR
+do
+  wget  http://download.cdn.mozilla.net/pub/mozilla.org/$name/releases/$version/linux-$PKGMK_ARCH/xpi/$lang.xpi
+  install -Dm644 $lang.xpi \
+  $PKG/usr/lib/$name/extensions/langpack-$lang@$name.mozilla.org.xpi
+  rm $lang.xpi
+done
+
+cd $PKG
+bsdtar -cf \
+$PKGMK_PACKAGE_DIR/${name}.pt${PKGMK_PACKAGE_EXT}$version-$release \
+usr/lib/$name/extensions/langpack-pt-PT@$name.mozilla.org.xpi \
+usr/lib/$name/extensions/langpack-pt-BR@$name.mozilla.org.xpi
+
+rm usr/lib/$name/extensions/langpack-pt-BR@$name.mozilla.org.xpi
+rm usr/lib/$name/extensions/langpack-pt-PT@$name.mozilla.org.xpi
+}
+locale_ro()
+{
+pack_remove_locale ro
+}
+locale_ru()
+{
+pack_remove_locale ru
+}
+locale_sk()
+{
+pack_remove_locale sk
+}
+locale_sl()
+{
+pack_remove_locale sl
+}
+locale_sq()
+{
+pack_remove_locale sq
+}
+locale_sr()
+{
+pack_remove_locale sr
+}
+locale_sv()
+{
+lang=sv-SE
+wget  http://download.cdn.mozilla.net/pub/mozilla.org/$name/releases/$version/linux-$PKGMK_ARCH/xpi/$lang.xpi
+install -Dm644 $lang.xpi \
+$PKG/usr/lib/$name/extensions/langpack-$lang@$name.mozilla.org.xpi
+rm $lang.xpi
+cd $PKG
+bsdtar -cf \
+$PKGMK_PACKAGE_DIR/${name}.sv${PKGMK_PACKAGE_EXT}$version-$release \
+usr/lib/$name/extensions/langpack-$lang@$name.mozilla.org.xpi
+
+rm usr/lib/$name/extensions/langpack-$lang@$name.mozilla.org.xpi
+}
+locale_tr()
+{
+pack_remove_locale tr
+}
+locale_uk()
+{
+pack_remove_locale uk
+}
+locale_vi()
+{
+pack_remove_locale vi
+}
+locale_zh()
+{
+for lang in zh-CN zh-TW
+do
+  wget  http://download.cdn.mozilla.net/pub/mozilla.org/$name/releases/$version/linux-$PKGMK_ARCH/xpi/$lang.xpi
+  install -Dm644 $lang.xpi \
+  $PKG/usr/lib/$name/extensions/langpack-$lang@$name.mozilla.org.xpi
+  rm $lang.xpi
+done
+
+cd $PKG
+bsdtar -cf \
+$PKGMK_PACKAGE_DIR/${name}.zh${PKGMK_PACKAGE_EXT}$version-$release \
+usr/lib/$name/extensions/langpack-zh-CN@$name.mozilla.org.xpi \
+usr/lib/$name/extensions/langpack-zh-TW@$name.mozilla.org.xpi
+
+rm usr/lib/$name/extensions/langpack-zh-CN@$name.mozilla.org.xpi
+rm usr/lib/$name/extensions/langpack-zh-TW@$name.mozilla.org.xpi
+
+}
