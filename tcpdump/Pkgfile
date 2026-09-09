@@ -1,0 +1,25 @@
+description="Powerful command-line packet analyzer"
+url="http://www.tcpdump.org/"
+
+packager="tnut <tnut@nutyx.org>"
+contributors="Greg,Spiky"
+
+makedepends=(libpcap libcap-ng openssl)
+
+name=tcpdump
+version=4.99.6
+release=2
+
+source=(http://www.tcpdump.org/release/tcpdump-$version.tar.gz)
+
+build () {
+
+	cd $name-$version
+	./configure \
+	--prefix=/usr \
+	--sbindir=/usr/bin \
+
+	make
+	make DESTDIR=$PKG install
+	rm -f $PKG/usr/bin/tcpdump.$version
+}
