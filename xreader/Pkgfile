@@ -11,7 +11,7 @@ makedepends=(meson samurai intltool itstool gobject-introspection djvulibre
 run=(poppler-glib webkit2gtk-4 xapp)
 
 name=xreader
-version=4.6.5
+version=4.6.9
 
 source=(https://github.com/linuxmint/$name/archive/$version/$name-$version.tar.gz)
 
@@ -24,7 +24,6 @@ cd    build
 meson setup .. \
   --prefix=/usr \
   --libexecdir=lib/$name \
-  -Dmathjax-directory=/usr/share/mathjax2 \
   -Dcomics=true \
   -Ddjvu=true \
   -Dt1lib=true \

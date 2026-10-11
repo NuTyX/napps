@@ -18,10 +18,8 @@ drwxr-xr-x	root/root	usr/lib/xreader/3/
 drwxr-xr-x	root/root	usr/lib/xreader/3/backends/
 -rw-r--r--	root/root	usr/lib/xreader/3/backends/comicsdocument.xreader-backend
 -rw-r--r--	root/root	usr/lib/xreader/3/backends/djvudocument.xreader-backend
--rw-r--r--	root/root	usr/lib/xreader/3/backends/epubdocument.xreader-backend
 -rwxr-xr-x	root/root	usr/lib/xreader/3/backends/libcomicsdocument.so
 -rwxr-xr-x	root/root	usr/lib/xreader/3/backends/libdjvudocument.so
--rwxr-xr-x	root/root	usr/lib/xreader/3/backends/libepubdocument.so
 -rwxr-xr-x	root/root	usr/lib/xreader/3/backends/libpdfdocument.so
 -rwxr-xr-x	root/root	usr/lib/xreader/3/backends/libpixbufdocument.so
 -rwxr-xr-x	root/root	usr/lib/xreader/3/backends/libpsdocument.so
