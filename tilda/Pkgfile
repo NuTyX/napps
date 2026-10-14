@@ -4,7 +4,7 @@ url="https://github.com/lanoxx/tilda"
 packager="tnut <tnut@nutyx.org>"
 contributors="Greg,Spiky"
 
-makedepends=(confuse vte libglade)
+makedepends=(confuse vte)
 
 name=tilda
 version=2.0.0
