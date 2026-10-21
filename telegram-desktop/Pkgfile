@@ -7,7 +7,7 @@ packager="tnut <tnut@nutyx.org>"
 contributors="Spiky"
 
 name=telegram-desktop
-version=7.3.1
+version=7.3.2
 
 _td_commit=c15d3f5a5de6e3ba5839822c451152e5e18bb700
 _wallet_engine_ver=0.0.7
@@ -18,7 +18,8 @@ makedepends=(python-setuptools abseil-cpp ada ffmpeg glib hunspell kcoreaddons
              xorg-libdrm xorg-libx11 xorg-libxext xorg-libxshmfence xorg-libxxf86vm
              qt6-svg vulkan-headers boost pcre2 libffi protobuf libtg_owt
              openexr tlottie xxhash minizip openal openh264 opus rnnoise)
-run=(tlottie hicolor-icon-theme shared-mime-info gtk-update-icon-cache desktop-file-utils)
+run=(tlottie hicolor-icon-theme shared-mime-info gtk-update-icon-cache desktop-file-utils
+     qt6-imageformats qt6-wayland)
 source=(https://github.com/telegramdesktop/tdesktop/releases/download/v$version/tdesktop-$version-full.tar.gz
         https://github.com/i582/wallet-engine/archive/refs/tags/v${_wallet_engine_ver}.tar.gz
         https://github.com/desktop-app/patches/raw/refs/heads/master/wallet-engine.patch)
