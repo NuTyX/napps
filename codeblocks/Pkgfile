@@ -1,0 +1,46 @@
+description="a cross-platform Integrated Development Environment (IDE)."
+url="https://www.codeblocks.org/"
+
+license="GPL3"
+
+maintainer="The Code::Blocks Team"
+packager="tnut <tnut@nutyx.org>"
+contributors="Rems,Spiky"
+
+makedepends=(sed autoconf m4 zip boost hunspell wxwidgets imagemagick)
+run=(desktop-file-utils gtk-update-icon-cache hicolor-icon-theme
+     shared-mime-info)
+
+name=codeblocks
+version=25.03
+release=1
+
+source=($name-consolidate_1.patch
+        https://downloads.sourceforge.net/codeblocks/${name}_$version.tar.xz)
+
+prepare() {
+ cd ${name}_$version
+
+ # Thanks fedora team
+ patch -Np1 -i ../$name-consolidate_1.patch
+
+ # Put icons in the right place
+ magick src/mime/codeblocks.png +set date:create +set date:modify \
+ -background none -extent 64x64 src/mime/codeblocks.png
+ sed -i 's|$(datadir)/pixmaps|$(datadir)/icons/hicolor/64x64/apps|' \
+ src/mime/Makefile.am
+
+ autoreconf -fiv
+}
+build () {
+ cd ${name}_$version
+
+ ./configure --prefix=/usr    \
+  --with-contrib-plugins=all,-FileManager \
+  --with-wx-config=/usr/bin/wx-config
+
+ sed -i 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+
+ make
+ make DESTDIR=$PKG install
+}

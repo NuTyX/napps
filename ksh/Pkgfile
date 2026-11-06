@@ -1,0 +1,26 @@
+description="The Original AT&T Korn Shell"
+url='http://kornshell.org/'
+
+packager="spiky <spiky@nutyx.org>"
+contributors="Tnut"
+
+makedepends=(meson ninja python)
+
+name=ksh
+version=2020.0.0
+release=4
+
+source=(https://github.com/att/ast/releases/download/$version/$name-$version.tar.xz)
+
+build() {
+mkdir build
+cd    build
+meson --prefix=/ \
+      ../$name-$version
+ninja
+DESTDIR=$PKG ninja install
+}
+package() {
+mkdir $PKG/usr
+mv $PKG/share $PKG/usr/share
+}

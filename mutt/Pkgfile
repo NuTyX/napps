@@ -1,0 +1,51 @@
+description="MailUserAgent, useful for reading, writing, replying to, saving, and deleting your email."
+url="http://www.mutt.org/"
+
+packager="spiky <spiky@nutyx.org>"
+contributors="Berlius,Greg,Tnut"
+
+makedepends=(aspell aspell-dict cyrus-sasl gnupg gpgme libidn
+             kerberos slang openssl gnutls db libxslt lynx)
+run=(shadow sqlite)
+
+name=mutt
+version=2.4.1
+_version=2.4.1
+
+source=(http://ftp.mutt.org/pub/mutt/mutt-$version.tar.gz)
+
+ 
+build() {
+
+cd $name-${_version}
+
+sed -i -e 's/ -with_backspaces//' -e 's/elinks/links/' \
+  -e 's/-no-numbering -no-references//' doc/Makefile.in
+
+./configure --prefix=/usr     \
+            --sysconfdir=/etc \
+            --with-docdir=/usr/share/doc/mutt-$version \
+            --enable-pop      \
+            --enable-imap     \
+            --enable-hcache   \
+            --enable-sidebar  \
+            --without-qdbm    \
+            --with-gdbm       \
+            --with-ssl        \
+            --without-bdb     \
+            --with-sasl       \
+            --enable-smtp     \
+            --enable-sqlite3
+make
+
+make DESTDIR=$PKG install
+
+test -s doc/manual.txt ||
+install -v -m644 doc/manual.txt.shipped \
+$PKG/usr/share/doc/$name-$version
+
+if [ -f $PKG/usr/bin/mutt_dotlock ]; then
+  chown root:mail $PKG/usr/bin/mutt_dotlock
+  chmod -v 2755 $PKG/usr/bin/mutt_dotlock
+fi
+}

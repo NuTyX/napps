@@ -1,0 +1,35 @@
+description="MSWord library can load and parse Word 2000, 97, 95 and 6 file formats"
+url="http://wvware.sourceforge.net/"
+
+packager="tnut <tnut@nutyx.org>"
+contributors="Pierre,Spiky"
+
+makedepends=(autoconf libtool automake libgsf libpng)
+
+name=wv
+version=1.2.9
+release=6
+
+source=(https://github.com/AbiWord/wv/archive/refs/tags/$name-1-2-9.tar.gz
+        wv-1.2.9-format_security.patch)
+
+prepare() {
+mv wv-wv-1-2-9 $name-$version
+
+cd $name-$version
+patch -Np1 -i ../wv-1.2.9-format_security.patch
+
+touch AUTHORS ChangeLog
+autoreconf -fi
+}
+
+build() {
+cd $name-$version
+./configure --prefix=/usr --mandir=/usr/share/man
+
+make
+make DESTDIR=$PKG install
+
+# Obsolet lib
+rm $PKG/usr/lib/libwv.la
+}

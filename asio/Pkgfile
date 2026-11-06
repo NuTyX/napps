@@ -1,0 +1,34 @@
+description="Cross-platform C++ library for ASynchronous network I/O"
+url="https://github.com/chriskohlhoff/asio"
+
+packager="spiky <spiky@nutyx.org>"
+contributors="Greg,Tnut"
+
+makedepends=(boost automake autoconf)
+
+name=asio
+version=1.38.2
+_version=1.38.2
+
+#PKGMK_IGNORE_UNPACK="yes"
+
+source=($url.git)
+
+prepare() {
+localedef -i en_US -f UTF-8 en_US.UTF-8
+LC_ALL=en_US.UTF-8 LANG=en_US.utf-8
+}
+
+build() {
+cd $name-$version
+
+autoreconf -fiv
+
+ ./configure \
+    --prefix=/usr
+  make
+
+make DESTDIR=$PKG install
+
+install -D -m644 LICENSE_1_0.txt $PKG/usr/share/licenses/$name/LICENSE
+}

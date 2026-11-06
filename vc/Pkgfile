@@ -1,0 +1,29 @@
+makedepends=(cmake)
+
+description="A library to ease explicit vectorization of C++ code"
+url="https://github.com/VcDevel/Vc"
+
+license="BSD 3-Clause"
+
+packager="spiky <spiky@nutyx.org>"
+
+name=vc
+version=1.4.5
+release=2
+PKGMK_KEEP_SOURCES="no"
+
+source=(https://github.com/VcDevel/Vc/archive/refs/tags/$version.tar.gz)
+
+build() {
+
+mkdir -p build && cd build
+
+cmake ../Vc-$version \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DTARGET_ARCHITECTURE=generic
+
+make
+make DESTDIR=$PKG install
+
+install -Dm644 $SRC/Vc-$version/LICENSE $PKG/usr/share/licenses/$name/LICENSE
+}

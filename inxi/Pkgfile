@@ -1,0 +1,27 @@
+description="script to get system information"
+url="http://inxi.org"
+
+license="GPL3"
+
+packager="tnut tnut@nutyx.org>"
+contributors="Greg,Remy,Spiky"
+
+makedepends=(coreutils grep procps-ng sed
+             file iproute2 sudo usbutils kmod)
+run=(gawk pciutils usbutils xorg-xdpyinfo xorg-xprop xorg-xrandr lm-sensors)
+
+name=inxi
+version=3.3.41.1
+tag="${version%.*}-${version##*.}"
+
+
+source=(https://codeberg.org/smxi/inxi.git)
+
+build() {
+cd $name
+  install -D -m755 inxi $PKG/usr/bin/inxi
+  install -D -m755 inxi.1 $PKG/usr/share/man/man1/inxi.1
+
+  install -Dm644 LICENSE.txt $PKG/usr/share/licenses/$name/LICENSE.txt
+}
+

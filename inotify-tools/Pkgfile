@@ -1,0 +1,19 @@
+description='C library and a set of command-line programs for Linux providing a simple interface to inotify'
+url='https://github.com/inotify-tools/inotify-tools'
+
+packager="spiky <spiky@nutyx.org>"
+contributors="Tnut"
+
+makedepends=(rustc doxygen)
+name=inotify-tools
+version=4.26.270
+
+source=(https://github.com/inotify-tools/inotify-tools/archive/$version/$name-$version.tar.gz)
+
+build() {
+
+  cd $name-$version
+
+  make
+  make DESTDIR=$PKG prefix=/usr install
+}

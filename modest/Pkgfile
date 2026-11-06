@@ -1,0 +1,23 @@
+description="Fast HTML renderer implemented as a pure C99 library with no outside dependencies"
+url="https://github.com/lexborisov/modest"
+
+
+packager="spiky <spiky@nutyx.org>"
+contributors="Greg,Tnut"
+
+makedepends=(git)
+
+name=modest
+version=2540a03
+release=3
+
+source=()
+
+
+ build() {
+  git clone https://github.com/lexborisov/Modest.git ${name}
+  cd "${name}"
+  make CFLAGS="$CFLAGS -Wno-variadic-macros" prefix="/usr"
+  make DESTDIR="${PKG}/" prefix="/usr" install
+
+}

@@ -1,0 +1,30 @@
+description="a modern interactive commandline shell."
+url="https://github.com/fish-shell/fish-shell"
+
+license="GPL2 LGPL2"
+
+packager="spiky <spiky@nutyx.org>"
+contributors="Greg,Fanch,Remy,Tnut"
+
+makedepends=(cmake rustc doxygen)
+
+name=fish
+version=4.9.3
+
+source=($url.git)
+
+
+build() {
+
+  cd $name-$version
+  mkdir build
+  cd    build
+  cmake -DCMAKE_INSTALL_PREFIX=/usr \
+  -DCMAKE_INSTALL_SYSCONFDIR=/etc \
+  -DCMAKE_BUILD_TYPE=Release \
+  ..
+  make
+  make DESTDIR=$PKG install
+
+  install -Dm644 ../COPYING $PKG/usr/share/licenses/$name/COPYING
+}

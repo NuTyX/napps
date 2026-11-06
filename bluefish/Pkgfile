@@ -1,0 +1,37 @@
+description="A powerful HTML editor for experienced web designers and programmers"
+url="https://bluefish.openoffice.nl/"
+
+packager="spiky <spiky@nutyx.org>"
+contributors="Greg,Tnut"
+
+makedepends=(pcre enchant gtk3)
+run=(desktop-file-utils)
+
+name=bluefish
+version=2.2.19
+
+source=(https://www.bennewitz.com/bluefish/stable/source/$name-$version.tar.bz2)
+
+prepare() {
+
+cd $name-$version
+
+sed '/infbrowser/d' -i src/Makefile.am
+autoreconf
+}
+
+build() {
+
+	cd $name-$version
+
+	./configure --prefix=/usr \
+		--with-freedesktop_org-menu=/usr/share/applications \
+		--with-freedesktop_org-mime=/usr/share/mime \
+		--with-icon-path=/usr/share/pixmaps \
+		--disable-update-databases \
+		--without-libgnomeui \
+		--docdir=/usr/share/doc/$name-$version
+
+make
+make DESTDIR=$PKG install
+}

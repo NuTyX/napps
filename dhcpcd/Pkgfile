@@ -1,0 +1,47 @@
+description="Connect your computer to a network which uses DHCP to assign network addresses."
+url="https://github.com/NetworkConfiguration/dhcpcd"
+
+license="BSD-2-Clause"
+
+maintainer="Roy Marples"
+packager="spiky <spiky@nutyx.org>"
+contributors="Tnut"
+
+name=dhcpcd
+version=10.5.2
+
+makedepends=(shadow git)
+
+PKGMK_GROUPS=(man)
+
+scriptsversion=20260315
+source=(https://sourceforge.net/projects/nutyx/files/sources/nutyx-scripts/nutyx-scripts-$scriptsversion.tar.xz
+	$url.git)
+
+prepare() {
+groupadd -g 52 $name
+useradd -c 'dhcpcd PrivSep' -d /var/lib/$name \
+-g $name -s /usr/bin/false -u 52 $name
+}
+build() {
+install -v m700 -d $PKG/var/lib/$name
+cd $name-$version
+
+sed -i "s@mkdir@/bin/mkdir@" hooks/*
+
+./configure --prefix=/usr   \
+--sbindir=/usr/bin          \
+--sysconfdir=/etc           \
+--libexecdir=/usr/lib/$name \
+--dbdir=/var/lib/$name      \
+--runstatedir=/run          \
+--privsepuser=dhcpcd
+make
+make DESTDIR=$PKG install
+#
+## service
+cd ../nutyx-scripts-$scriptsversion
+make DESTDIR=$PKG install-sysd-dhcpcd
+
+install -Dm644 $SRC/$name-$version/LICENSE $PKG/usr/share/licenses/$name/LICENSE
+}

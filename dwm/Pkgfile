@@ -1,0 +1,19 @@
+description='dynamic window manager for X.'
+url='https://dwm.suckless.org/'
+
+packager="spiky <spiky@nutyx.org>"
+contributors="Tnut"
+
+makedepends=(xorg-libxinerama)
+run=(st)
+
+name=dwm
+version=6.5
+
+source=(http://dl.suckless.org/dwm/dwm-$version.tar.gz)
+
+build() {
+cd $name-$version
+make
+make DESTDIR=$PKG PREFIX=/usr install
+}

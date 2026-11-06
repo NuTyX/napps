@@ -1,0 +1,23 @@
+description="Simple X server perfomance benchmarker."
+packager="spiky <spiky@nutyx.org>"
+contributors="Pierre,Tnut"
+
+PKGMK_GROUPS=(doc man)
+url="http://xorg.freedesktop.org"
+
+name=xorg-x11perf
+version=1.7.0
+release=2
+_name=${name/xorg-/}
+makedepends=(xorgproto xorg-libx11 xorg-libxmu xorg-libxrender)
+source=(http://ftp.x.org/pub/individual/test/${_name}-$version.tar.xz)
+
+build=xorg
+
+uptodate() {
+local ext url name LINX
+LYNX="lynx -read_timeout=20 -dump -listonly -nonumbers "
+ext=".tar.bz2"
+url="https://ftp.x.org/archive//individual//app"
+$LYNX $url/?C=M\;O=D|grep "$ext$"|grep "$url/${_name}-"|sed "s@$ext\$@@"|sed "s@$url/${_name}-@@"|head -1
+}
