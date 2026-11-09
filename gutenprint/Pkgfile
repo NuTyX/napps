@@ -1,12 +1,12 @@
 description="Top quality printer drivers for POSIX systems"
 url="http://gimp-print.sourceforge.net"
 
-contributors="PierreB,Greg,Spiky"
-packager="tnut <tnut@nutyx.org>"
+contributors="PierreB,Greg,Tnut"
+packager="spiky <spiky@nutyx.org>"
 
 name=gutenprint
 version=5.3.5
-release=3
+release=4
 
 makedepends=(autoconf sed m4 cups gimp)
 

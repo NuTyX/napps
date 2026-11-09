@@ -35,9 +35,6 @@ drwxr-xr-x	root/root	usr/lib/gutenprint/5.3/modules/
 lrwxrwxrwx	root/root	usr/lib/libgutenprint.so -> libgutenprint.so.9.6.0
 lrwxrwxrwx	root/root	usr/lib/libgutenprint.so.9 -> libgutenprint.so.9.6.0
 -rwxr-xr-x	root/root	usr/lib/libgutenprint.so.9.6.0
-lrwxrwxrwx	root/root	usr/lib/libgutenprintui2.so -> libgutenprintui2.so.2.6.0
-lrwxrwxrwx	root/root	usr/lib/libgutenprintui2.so.2 -> libgutenprintui2.so.2.6.0
--rwxr-xr-x	root/root	usr/lib/libgutenprintui2.so.2.6.0
 drwxr-xr-x	root/root	usr/share/
 drwxr-xr-x	root/root	usr/share/cups/
 -rw-r--r--	root/root	usr/share/cups/calibrate.ppm
