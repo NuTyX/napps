@@ -9,7 +9,6 @@ drwxr-xr-x	root/root	usr/lib/deadbeef/
 -rwxr-xr-x	root/root	usr/lib/deadbeef/alsa.so
 -rwxr-xr-x	root/root	usr/lib/deadbeef/artwork.so
 -rwxr-xr-x	root/root	usr/lib/deadbeef/converter.so
--rwxr-xr-x	root/root	usr/lib/deadbeef/converter_gtk2.so
 -rwxr-xr-x	root/root	usr/lib/deadbeef/converter_gtk3.so
 drwxr-xr-x	root/root	usr/lib/deadbeef/convpresets/
 -rw-r--r--	root/root	usr/lib/deadbeef/convpresets/AAC_VBR_192Kbps_(Nero_FAAC).txt
@@ -130,7 +129,6 @@ drwxr-xr-x	root/root	usr/lib/deadbeef/data68/Replay/
 -rwxr-xr-x	root/root	usr/lib/deadbeef/dca.so
 -rwxr-xr-x	root/root	usr/lib/deadbeef/ddb_dsp_libretro.so
 -rwxr-xr-x	root/root	usr/lib/deadbeef/ddb_dumb.so
--rwxr-xr-x	root/root	usr/lib/deadbeef/ddb_gui_GTK2.so
 -rwxr-xr-x	root/root	usr/lib/deadbeef/ddb_gui_GTK3.so
 -rwxr-xr-x	root/root	usr/lib/deadbeef/ddb_mono2stereo.so
 -rwxr-xr-x	root/root	usr/lib/deadbeef/ddb_shn.so
@@ -141,19 +139,20 @@ drwxr-xr-x	root/root	usr/lib/deadbeef/data68/Replay/
 -rwxr-xr-x	root/root	usr/lib/deadbeef/gme.so
 -rwxr-xr-x	root/root	usr/lib/deadbeef/hotkeys.so
 -rwxr-xr-x	root/root	usr/lib/deadbeef/in_sc68.so
+-rwxr-xr-x	root/root	usr/lib/deadbeef/lyrics_gtk3.so
 -rwxr-xr-x	root/root	usr/lib/deadbeef/m3u.so
+-rwxr-xr-x	root/root	usr/lib/deadbeef/medialib.so
 -rwxr-xr-x	root/root	usr/lib/deadbeef/mms.so
 -rwxr-xr-x	root/root	usr/lib/deadbeef/mp3.so
+-rwxr-xr-x	root/root	usr/lib/deadbeef/mpris.so
 -rwxr-xr-x	root/root	usr/lib/deadbeef/musepack.so
 -rwxr-xr-x	root/root	usr/lib/deadbeef/nullout.so
 -rwxr-xr-x	root/root	usr/lib/deadbeef/oss.so
--rwxr-xr-x	root/root	usr/lib/deadbeef/pltbrowser_gtk2.so
 -rwxr-xr-x	root/root	usr/lib/deadbeef/pltbrowser_gtk3.so
 -rwxr-xr-x	root/root	usr/lib/deadbeef/psf.so
 -rwxr-xr-x	root/root	usr/lib/deadbeef/pulse.so
 -rwxr-xr-x	root/root	usr/lib/deadbeef/rg_scanner.so
 -rwxr-xr-x	root/root	usr/lib/deadbeef/shellexec.so
--rwxr-xr-x	root/root	usr/lib/deadbeef/shellexecui_gtk2.so
 -rwxr-xr-x	root/root	usr/lib/deadbeef/shellexecui_gtk3.so
 -rwxr-xr-x	root/root	usr/lib/deadbeef/sid.so
 -rwxr-xr-x	root/root	usr/lib/deadbeef/sndfile.so
@@ -167,6 +166,7 @@ drwxr-xr-x	root/root	usr/lib/deadbeef/data68/Replay/
 drwxr-xr-x	root/root	usr/share/
 drwxr-xr-x	root/root	usr/share/applications/
 -rw-r--r--	root/root	usr/share/applications/deadbeef.desktop
+-rw-r--r--	root/root	usr/share/applications/deadbeef_enqueue.desktop
 drwxr-xr-x	root/root	usr/share/deadbeef/
 drwxr-xr-x	root/root	usr/share/deadbeef/pixmaps/
 -rw-r--r--	root/root	usr/share/deadbeef/pixmaps/buffering_16.png

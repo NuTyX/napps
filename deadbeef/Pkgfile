@@ -1,30 +1,30 @@
 description="A GTK+ audio player for GNU/Linux"
-url="http://deadbeef.sourceforge.net"
+url="https://github.com/DeaDBeeF-Player/deadbeef"
 
-contributors="Pierre,Greg,Spiky"
-packager="tnut <tnut@nutyx.org>"
+contributors="Pierre,Greg,Tnut"
+packager="spiky <spiky@nutyx.org>"
 
-makedepends=(intltool perl-xml-parser gtk3 libdispatch
+makedepends=(intltool perl-xml-parser gtk3 libdispatch git
              x264 flac libmad glib librsvg libcaca ffmpeg
              alsa-lib xorg-libxinerama xorg-libxpm libvpx libcdio vcdimager
              live libdvdcss libdvdread libdvdnav libogg libtheora
              lame jansson faac libvorbis faad2 liba52 libmpeg2
-             libmpcdec fribidi libdv speex pulseaudio llvm)
+             libmpcdec fribidi libdv speex pulseaudio llvm gtk3)
 
 run=(desktop-file-utils gtk-update-icon-cache)
 
 name=deadbeef
-version=1.9.6
-release=3
+version=1.10.3
 
 PKGMK_GROUPS=(devel)
 
-source=(https://sourceforge.net/projects/deadbeef/files/travis/linux/$version/$name-$version.tar.bz2)
+source=(https://sourceforge.net/projects/deadbeef/files/Builds/$version/linux/deadbeef-$version.tar.bz2)
 
 build () {
+    
     cd $name-$version
     export CC=clang CXX=clang++
-    ./configure --prefix=/usr --disable-ffmpeg --disable-notify --disable-lfm --enable-gtk3
+    ./configure --prefix=/usr --disable-ffmpeg --disable-notify --disable-lfm --disable-gtk2
   make 
   make DESTDIR=$PKG install
 }
